@@ -1,11 +1,11 @@
 import { NavigationProp, ParamListBase, RouteProp, useFocusEffect } from '@react-navigation/native';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
-import { PetController } from '../../controller/PetController';
-import { PetSQLiteRepository } from '../../repository/PetSQLiteRepo';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Button, FlatList } from 'react-native';
 import { petFactory } from '../../factory';
 import { Pet } from '../../model/Pet';
 import { WithId } from '../../controller/interfaces';
+import { useIsFocused } from "@react-navigation/native"; 
+import ListItem from '../components/ListItem';
 
 // import { Container } from './styles';
 type ListScreenProps = {
@@ -16,14 +16,16 @@ type ListScreenProps = {
 const ListScreen: React.FC<ListScreenProps> = ({navigation, route}) => {
     const [pets, setPets] = useState<WithId<Pet>[]>([])
     const petController = petFactory()
+    const focus = useIsFocused();
 
-    useFocusEffect(() => {
+    useEffect(() => {
         (async () => {
             const response = await petController.list()
             setPets(response)   
         })()  
-    })
+    }, [focus])
     useEffect(() => {
+  
         navigation.setOptions({
             headerRight: () => (
                 <Button 
@@ -38,9 +40,13 @@ const ListScreen: React.FC<ListScreenProps> = ({navigation, route}) => {
     }, [navigation])
 
     return (
-        <View>
-            <Text>Olá list</Text>
-        </View>
+        <FlatList
+            data={pets}
+            renderItem={({item}) => (
+                <ListItem {...item}/>
+            )}
+            keyExtractor={item => item.id.toString()}
+        />
     )
 }
 
