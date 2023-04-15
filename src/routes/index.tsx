@@ -1,10 +1,8 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from 'react'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import ListScreen from '../pages/List';
-import FormScreen from '../pages/Form';
-// import { Container } from './styles';
+import ListScreen from '../pages/List'
+import FormScreen from '../pages/Form'
 
 const Stack = createNativeStackNavigator()
 const Routes: React.FC = () => {
@@ -22,10 +20,13 @@ const Routes: React.FC = () => {
         <Stack.Screen 
             component={FormScreen}
             name='FormScreen'
+            options={{
+                title: 'Pet'
+            }}
         />
 
     </Stack.Navigator>
-  );
+  )
 }
 
 export default Routes;
