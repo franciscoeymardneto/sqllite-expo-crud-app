@@ -15,6 +15,9 @@ const Routes: React.FC = () => {
         <Stack.Screen 
             component={ListScreen}
             name='ListScreen'
+            options={{
+                title: 'Pets'
+            }}
         />
         <Stack.Screen 
             component={FormScreen}
