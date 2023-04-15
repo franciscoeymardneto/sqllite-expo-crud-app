@@ -43,4 +43,23 @@ export class DefaultSQLiteRepo {
       });
     });
   };
+
+  async executeInsertQuery(query, params = []): Promise<number> {
+
+    const db = await this.getDbInstance()
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          query,
+          params,
+          (_, { insertId }) => {
+            resolve(insertId);
+          },
+          (_, error): any => {
+            reject(error);
+          }
+        );
+      });
+    });
+  };
 }

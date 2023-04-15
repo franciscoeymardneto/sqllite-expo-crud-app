@@ -9,7 +9,10 @@ export class PetSQLiteRepository extends DefaultSQLiteRepo implements iPetReposi
     }
     async save(value: Pet): Promise<WithId<Pet>> {
         try {
-            
+            const result = await this.executeInsertQuery('INSERT INTO pets_list (name,age,specie) VALUES (?,?,?)',
+            [value.name,value.age,value.specie])
+
+            return {...value, id: result}
         } catch (error) {
             throw new Error(error.message)
         }
