@@ -57,7 +57,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
     const handleNameChange = (text) => setName(text);
     const handleAgeChange = (text) => setAge(text);
     const handleSpeciesChange = (text) => setSpecies(text);
-    const modalizeRef = useRef<Modalize>(null);
+    const sheetRef = React.useRef(null);
 
     useEffect(() => {
         navigation.setOptions({
@@ -100,13 +100,13 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
     }
 
     async function handleDelete() {
-        onOpen()
-        // await petController.delete(pet.id)
-        // navigation.goBack()
+        // onOpen()
+        await petController.delete(pet.id)
+        navigation.goBack()
     }
 
     const onOpen = () => {
-        modalizeRef.current?.open();
+        sheetRef.current.snapTo(0)
       };
 
     return (
@@ -138,12 +138,16 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
                 />
             </View>
         </View>
-        <Modalize 
-            ref={modalizeRef}
-            modalHeight={200}
-        >
-            <Text>jkdjjdjdjdbhjd</Text>
-        </Modalize>
+        <BottomSheet
+        ref={sheetRef}
+        snapPoints={[450, 300, 0]}
+        borderRadius={10}
+        renderContent={() => (
+            <View>
+                <Text>jhsbdcjhbvdsjhbhjv</Text>
+            </View>
+        )}
+      />
         </>
     )
 }
