@@ -1,10 +1,12 @@
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, TextInput, Text, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { petFactory } from '../../factory';
 import { Pet } from '../../model/Pet';
 import { WithId } from '../../controller/interfaces';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
 type FormScreenProps = {
     route: RouteProp<ParamListBase>
@@ -55,6 +57,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
     const handleNameChange = (text) => setName(text);
     const handleAgeChange = (text) => setAge(text);
     const handleSpeciesChange = (text) => setSpecies(text);
+    const modalizeRef = useRef<Modalize>(null);
 
     useEffect(() => {
         navigation.setOptions({
@@ -97,11 +100,17 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
     }
 
     async function handleDelete() {
-        await petController.delete(pet.id)
-        navigation.goBack()
+        onOpen()
+        // await petController.delete(pet.id)
+        // navigation.goBack()
     }
 
+    const onOpen = () => {
+        modalizeRef.current?.open();
+      };
+
     return (
+        <>
         <View style={styles.container}>
             <View style={styles.formGroup}>
                 <Text style={styles.label}>Name</Text>
@@ -129,6 +138,13 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
                 />
             </View>
         </View>
+        <Modalize 
+            ref={modalizeRef}
+            modalHeight={200}
+        >
+            <Text>jkdjjdjdjdbhjd</Text>
+        </Modalize>
+        </>
     )
 }
 
