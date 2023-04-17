@@ -8,21 +8,26 @@ export class DefaultSQLiteRepo {
   }
 
   private async openDatabase(dbRerquired: any): Promise<SQLite.WebSQLDatabase> {
-    if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite/')).exists) {
-      await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite/', { intermediates: true });
-    }
+    // const database = SQLite.openDatabase("petsv1.db")
+    // database.closeAsync()
+    const internalDatabaseName = 'petsv1.db'
+    const sqlDir = FileSystem.documentDirectory + 'SQLite/'
 
-    const db = Asset.fromModule(dbRerquired)
-    await FileSystem.downloadAsync(
-      db.uri,
-      FileSystem.documentDirectory + 'SQLite/pets.db'
-    );
-    return SQLite.openDatabase('pets.db');
+    if (!(await FileSystem.getInfoAsync(sqlDir + internalDatabaseName)).exists) {
+      await FileSystem.makeDirectoryAsync(sqlDir, {intermediates: true});
+      const asset = Asset.fromModule(dbRerquired)
+      await FileSystem.downloadAsync(
+        asset.uri,
+        sqlDir + internalDatabaseName
+      );
+    }
+    
+
+    return SQLite.openDatabase('petsv1.db');
   }
 
   private async getDbInstance(): Promise<SQLite.WebSQLDatabase> {
-    const db = require('../../assets/db/pets.db')
-    return await this.openDatabase(db)
+    return await this.openDatabase(require('../../assets/db/petsv1.db'))
   }
 
   async executeSelectQuery<T>(query, params = []): Promise<T[]> {
@@ -35,13 +40,17 @@ export class DefaultSQLiteRepo {
           params,
           (_, { rows }) => {
             resolve(rows._array);
+            // db.closeAsync()
           },
           (_, error): any => {
             reject(error);
+            // db.closeAsync()
           }
         );
       });
     });
+
+   
   };
 
   async executeInsertQuery(query, params = []): Promise<number> {
