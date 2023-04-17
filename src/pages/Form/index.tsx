@@ -61,7 +61,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
             headerRight: () => (
                 <FormScreenHeaderActions
                     mode={mode}
-                    onDelete={() => petController.delete(id)}
+                    onDelete={() => handleDelete()}
                     onSave={() => handleSubmit()}
                 />)
         })
@@ -94,6 +94,11 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
         } catch (error) {
             Alert.alert(error.message)
         }
+    }
+
+    async function handleDelete() {
+        await petController.delete(pet.id)
+        navigation.goBack()
     }
 
     return (

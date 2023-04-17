@@ -19,7 +19,7 @@ export class PetSQLiteRepository extends DefaultSQLiteRepo implements iPetReposi
     }
     async list(): Promise<WithId<Pet>[]> {
         try {
-            return await this.executeSelectQuery<WithId<Pet>>('SELECT * FROM pets_list')
+            return await this.executeSelectQuery<WithId<Pet>>('SELECT * FROM pets_list ORDER BY name ASC')
         } catch (error) {
             throw new Error(error.message)
         }
@@ -55,7 +55,8 @@ export class PetSQLiteRepository extends DefaultSQLiteRepo implements iPetReposi
     }
     async delete(tId: number): Promise<void> {
         try {
-            
+            await this.executeUpdateQuery('DELETE FROM pets_list WHERE id = ?',
+            [tId])
         } catch (error) {
             throw new Error(error.message)
         }
