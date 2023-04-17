@@ -71,4 +71,42 @@ export class DefaultSQLiteRepo {
       });
     });
   };
+
+  async executeUpdateQuery(query, params = []): Promise<void> {
+    const db = await this.getDbInstance()
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          query,
+          params,
+          (_,result) => {
+            resolve(null)
+            console.log(result)
+          },
+          (_, error): any => {
+            reject(error)
+          }
+        )
+      })
+    })
+  }
+
+  async executeDeleteQuery(query, params = []): Promise<void> {
+    const db = await this.getDbInstance()
+    return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        tx.executeSql(
+          query,
+          params,
+          (_, result) => {
+            console.log(result)
+            resolve(null)
+          },
+          (_, error): any => {
+            reject(error)
+          }
+        )
+      })
+    })
+  }
 }

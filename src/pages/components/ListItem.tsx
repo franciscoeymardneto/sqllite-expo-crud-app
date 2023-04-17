@@ -1,13 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Pet } from '../../model/Pet';
+import { useNavigation } from '@react-navigation/native';
 
 // import { Container } from './styles';
 const ListItem: React.FC<Pet> = (props) => {
-
+    const navigation = useNavigation()
     return (
         <>
-            <TouchableOpacity style={styles.tableRow}>
+            <TouchableOpacity 
+                style={styles.tableRow}
+                onPress={() => navigation.navigate('FormScreen' as never, {
+                    mode: 'edit',
+                    pet: props
+                } as never)}
+            >
                 <View style={[styles.tableCell, styles.firstCell]}>
                     <Text style={styles.tableCellText}>{props.name}</Text>
                 </View>
@@ -37,7 +44,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     firstCell: {
-        flex: 0.3,
+        flex: 1,
     },
     tableCellText: {
         fontSize: 16,

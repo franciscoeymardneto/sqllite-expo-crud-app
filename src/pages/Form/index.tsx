@@ -4,6 +4,7 @@ import { View, TextInput, Text, StyleSheet, Button, Alert, TouchableOpacity } fr
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { petFactory } from '../../factory';
 import { Pet } from '../../model/Pet';
+import { WithId } from '../../controller/interfaces';
 
 type FormScreenProps = {
     route: RouteProp<ParamListBase>
@@ -24,7 +25,11 @@ const FormScreenHeaderActions: React.FC<FormScreenHeaderActionsProps> = (props) 
             }}
         >
             <View style={{ marginHorizontal: 5, display: props.mode === 'edit' ? 'flex' : 'none' }}>
-                <Button title='Deletar' color='red' onPress={() => props.onDelete()} />
+                <TouchableOpacity
+                    onPress={() => props.onDelete()}
+                >
+                    <Icon name={"delete"} size={27} />
+                </TouchableOpacity>
             </View>
             <View style={{ marginHorizontal: 5 }}>
                 <TouchableOpacity
@@ -41,6 +46,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
 
     const petController = petFactory()
     const mode = (route.params as any).mode || 'new'
+    const pet = (route.params as any).pet as WithId<Pet> || undefined
     const [id, setId] = useState(0);
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
@@ -60,6 +66,15 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
                 />)
         })
     }, [navigation, name, age, species])
+
+    useEffect(() => {
+        if (pet) {
+            setId(pet.id)
+            setName(pet.name)
+            setAge(pet.age.toString())
+            setSpecies(pet.specie)
+        }
+    }, [pet])
 
     async function handleSubmit() {
         try {

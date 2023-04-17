@@ -46,7 +46,9 @@ export class PetSQLiteRepository extends DefaultSQLiteRepo implements iPetReposi
     }
     async update(value: WithId<Pet>): Promise<WithId<Pet>> {
         try {
-            
+            await this.executeUpdateQuery('UPDATE pets_list SET name = ?, age = ?, specie = ? WHERE id = ?',
+            [value.name, value.age, value.specie, value.id])
+            return value
         } catch (error) {
             throw new Error(error.message)
         }
