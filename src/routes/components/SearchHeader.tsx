@@ -9,6 +9,7 @@ import HeaderTextInput from "../../pages/components/HeaderTextInput";
 type SearchHeaderProps = {
     title: string
     navigation: any
+    searchPetsByName: (name: string) => void
 }
 const SearchHeader: React.FC<SearchHeaderProps> = (props) => {
     const navigation = useNavigation();
@@ -57,7 +58,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = (props) => {
 
             <HeaderTextInput
                 value={search}
-                onTextChange={(value) => setSearch(value)}
+                onTextChange={(value) => {
+                    setSearch(value)
+                    props.searchPetsByName(value)
+                }}
                 show={showSearchBar}
                 setShow={setShowSearchBar}
             />

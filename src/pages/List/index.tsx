@@ -32,11 +32,17 @@ const ListScreen: React.FC<ListScreenProps> = ({navigation, route}) => {
             header: () => (
                 <SearchHeader
                     navigation={navigation}
+                    searchPetsByName={searchPetsByName}
                     title='Pets'
                 />
             )
         })
     }, [navigation])
+
+    async function searchPetsByName(name: string): Promise<void> {
+        const response = await petController.searchByName(name)
+        setPets(response)   
+    }
 
     return (
         <FlatList
