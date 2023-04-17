@@ -6,6 +6,7 @@ import { Pet } from '../../model/Pet';
 import { WithId } from '../../controller/interfaces';
 import { useIsFocused } from "@react-navigation/native"; 
 import ListItem from '../components/ListItem';
+import SearchHeader from '../../routes/components/SearchHeader';
 
 // import { Container } from './styles';
 type ListScreenProps = {
@@ -24,16 +25,14 @@ const ListScreen: React.FC<ListScreenProps> = ({navigation, route}) => {
             setPets(response)   
         })()  
     }, [focus])
+
     useEffect(() => {
   
         navigation.setOptions({
-            headerRight: () => (
-                <Button 
-                    title='Add' 
-                    onPress={() => navigation.navigate('FormScreen' as never, {
-                        mode: 'new' 
-                    } as never)}
-                    color='gray'
+            header: () => (
+                <SearchHeader
+                    navigation={navigation}
+                    title='Pets'
                 />
             )
         })

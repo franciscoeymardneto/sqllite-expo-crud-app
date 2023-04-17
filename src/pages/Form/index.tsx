@@ -1,6 +1,7 @@
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Text, StyleSheet, Button, Alert } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { petFactory } from '../../factory';
 import { Pet } from '../../model/Pet';
 
@@ -26,7 +27,11 @@ const FormScreenHeaderActions: React.FC<FormScreenHeaderActionsProps> = (props) 
                 <Button title='Deletar' color='red' onPress={() => props.onDelete()} />
             </View>
             <View style={{ marginHorizontal: 5 }}>
-                <Button title='Salvar' onPress={() => props.onSave()} />
+                <TouchableOpacity
+                    onPress={() => props.onSave()}
+                >
+                    <Icon name={"check"} size={27} />
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -66,7 +71,7 @@ const FormScreen: React.FC<FormScreenProps> = ({ route, navigation }) => {
             if (mode === 'new') {
                 await petController.save(params)
             } else {
-                await petController.update({...params, id})
+                await petController.update({ ...params, id })
             }
 
             navigation.goBack()
