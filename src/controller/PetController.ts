@@ -1,8 +1,8 @@
 import { Pet } from "../model/Pet";
 import { iPetRepository } from "../repository/interfaces";
-import { WithId, iCrudController } from "./interfaces";
+import { WithId, iPetController } from "./interfaces";
 
-export class PetController implements iCrudController<Pet> {
+export class PetController implements iPetController {
     private readonly petRepository: iPetRepository
 
     constructor(petRepository: iPetRepository) {
@@ -31,6 +31,15 @@ export class PetController implements iCrudController<Pet> {
             throw new Error(error.message)
         }
     }
+    async searchByName(name: string): Promise<WithId<Pet>[]> {
+        try {
+            const response = await this.petRepository.searchByName(name)
+
+            return response
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
     async update(value: WithId<Pet>): Promise<WithId<Pet>> {
         try {
             return await this.petRepository.update(value)
@@ -46,7 +55,7 @@ export class PetController implements iCrudController<Pet> {
         }
     }
 
-    public static initialize (petRepository: iPetRepository): iCrudController<Pet> {
+    public static initialize (petRepository: iPetRepository): iPetController {
         return new PetController(petRepository)
     }
 }

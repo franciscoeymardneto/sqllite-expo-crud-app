@@ -1,9 +1,8 @@
 import { PetController } from "../controller/PetController";
-import { iCrudController } from "../controller/interfaces";
-import { Pet } from "../model/Pet";
+import { iPetController } from "../controller/interfaces";
 import { PetSQLiteRepository } from "../repository/PetSQLiteRepo";
 
-export function petFactory (): iCrudController<Pet> {
+export function petFactory (): iPetController {
     const pet = new PetSQLiteRepository()
     return PetController.initialize(pet)
 }

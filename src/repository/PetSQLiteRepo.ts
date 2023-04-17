@@ -26,7 +26,20 @@ export class PetSQLiteRepository extends DefaultSQLiteRepo implements iPetReposi
     }
     async get(tId: number): Promise<WithId<Pet>> {
         try {
+            const response = await this.executeSelectQuery<WithId<Pet>>('SELECT * FROM pets_list WHERE id = ?',
+            [tId])
 
+            return response[0]
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
+
+    async searchByName(name: string): Promise<WithId<Pet>[]> {
+        try {
+            const response = await this.executeSelectQuery<WithId<Pet>>(`SELECT * FROM pets_list WHERE name LIKE "%${name}%" ORDER BY name ASC`)
+
+            return response
         } catch (error) {
             throw new Error(error.message)
         }
